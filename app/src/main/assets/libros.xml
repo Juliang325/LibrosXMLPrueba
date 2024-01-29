@@ -1,0 +1,12 @@
+<libros>
+    <libro nombre="Alas de Sangre" autor="Rebecca Yarros">
+        <isbn>978-84-08-27999-0</isbn>
+        <paginas>736</paginas>
+        <leido>false</leido>
+    </libro>
+    <libro nombre="El senor de los anillos" autor="J.R.R Tolkien">
+        <isbn>978-84-450-0302-2</isbn>
+        <paginas>1392</paginas>
+        <leido>true</leido>
+    </libro>
+</libros>
