@@ -14,25 +14,22 @@ data class Libros(
 
 @Root(name = "libro")
 data class Libro(
-    @field:Element(name = "nombre")
+    @field:Attribute(name = "nombre")
     var nombre: String = "",
 
-    @field:Element(name = "autor")
+    @field:Attribute(name = "autor")
     var autor: String = "",
 
     @field:Element(name = "isbn")
     var isbn: String = "",
 
-    @field:Attribute(name = "paginas")
+    @field:Element(name = "paginas")
     var paginas: Int = 0,
 
-    @field:Attribute(name = "leido", required = false)
+    @field:Element(name = "leido", required = false)
     var leido: Boolean? = null
-
 ){
     override fun toString(): String {
-        return "Nombre: " + nombre + "Author: " + autor + "ISBN: " + isbn + "Pagina: " + paginas + "Leido: " + leido
+        return "Nombre: " + nombre + " Author: " + autor + " ISBN: " + isbn + " Pagina: " + paginas + " Leido: " + leido
     }
-
-
 }

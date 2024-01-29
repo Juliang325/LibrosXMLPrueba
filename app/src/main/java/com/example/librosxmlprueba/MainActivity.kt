@@ -29,11 +29,12 @@ class MainActivity : AppCompatActivity() {
             Log.d("DAO", it.toString())
         }
 
-        val nuevoLibro = Libro("Fenris el lobo")
+        val nuevoLibro = Libro("Fenris el lobo","Pablo")
         libroDAO.addLibro(nuevoLibro)
         ProcesarArchivoXMLInterno()
         // Obtener y mostrar profesores después de agregar uno nuevo
         val librosAfterAdd = libroDAO.getAllLibros()
+        Log.d("DAO", "---------Lista--------")
         librosAfterAdd.forEach {
             Log.d("DAO", it.nombre)
         }

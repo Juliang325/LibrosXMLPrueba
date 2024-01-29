@@ -1,6 +1,8 @@
 package com.example.librosxmlprueba.daos
 
 import android.content.Context
+import android.content.Context.MODE_PRIVATE
+import android.util.Log
 import com.example.librosxmlprueba.modelo.Libro
 import com.example.librosxmlprueba.modelo.Libros
 import org.simpleframework.xml.core.Persister
@@ -11,7 +13,7 @@ class XMLLibroDAO(private val context: Context) : LibroDAO {
 
     private val serializer = Persister()
 
-    override fun getAllLibros(): List<Libro> {
+    override fun getAllLibros(): MutableList<Libro> {
         val libros = mutableListOf<Libro>()
 
         try {
@@ -34,11 +36,12 @@ class XMLLibroDAO(private val context: Context) : LibroDAO {
             currentLibroes.add(libro)
 
             val librosList = Libros(currentLibroes)
-            val outputStream = context.openFileOutput("libros.xml", Context.MODE_PRIVATE)
+            val outputStream = context.openFileOutput("libros.xml",MODE_PRIVATE)
             serializer.write(librosList, outputStream)
             outputStream.close()
         } catch (e: Exception) {
             e.printStackTrace()
+            Log.e("DAO", "Error al agregar libro: ${e.message}")
         }
     }
 
