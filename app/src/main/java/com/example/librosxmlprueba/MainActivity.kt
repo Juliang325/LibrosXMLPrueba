@@ -15,7 +15,6 @@ import javax.xml.parsers.SAXParserFactory
 class MainActivity : AppCompatActivity() {
 
     var libros = mutableListOf<Libro>()
-    private val libroDAO: LibroDAO by lazy { XMLLibroDAO(this) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -23,21 +22,19 @@ class MainActivity : AppCompatActivity() {
 
         copiarArchivoDesdeAssets()
         procesarArchivoAssetsXML()
-        // Usar el DAO para obtener y agregar profesores
-        val librosFromDAO = libroDAO.getAllLibros()
-        librosFromDAO.forEach {
-            Log.d("DAO", it.toString())
+        Log.d("prueba2", "probando procesado con Simple XML Framework")
+        libros.forEach {
+            Log.d("prueba2", it.toString())
+        }
+        Log.d("", "")
+        val libro=Libro("El principito","Antoine de Saint-Exupéry","9788478887200",120,false)
+        addLibro(libro)
+        deleteLibro(libro)
+        ProcesarArchivoXMLInterno()
+        libros.forEach {
+            Log.d("prueba2", it.toString())
         }
 
-        val nuevoLibro = Libro("Fenris el lobo","Pablo")
-        libroDAO.addLibro(nuevoLibro)
-        ProcesarArchivoXMLInterno()
-        // Obtener y mostrar profesores después de agregar uno nuevo
-        val librosAfterAdd = libroDAO.getAllLibros()
-        Log.d("DAO", "---------Lista--------")
-        librosAfterAdd.forEach {
-            Log.d("DAO", it.nombre)
-        }
         procesarArchivoXMLSAX()
     }
 
@@ -50,9 +47,9 @@ class MainActivity : AppCompatActivity() {
             val inputStream = assets.open("libros.xml")
             parser.parse(inputStream, handler)
 
-            // Accede a la lista de profesores desde handler.libros
+            // Accede a la lista de profesores desde handler.profesores
             handler.libros.forEach {
-                Log.d("SAX", "Libros: ${it.nombre}")
+                Log.d("SAX", "Profesor: ${it.nombre}")
             }
         } catch (e: Exception) {
             e.printStackTrace()
@@ -81,8 +78,50 @@ class MainActivity : AppCompatActivity() {
                 e.printStackTrace()
             }
         }
+
     }
 
+    fun addLibro(libro: Libro) {
+        try {
+            val serializer = Persister()
+            libros.add(libro)
+            val librosList = Libros(libros)
+            val outputStream = openFileOutput("libros.xml", MODE_PRIVATE)
+            serializer.write(librosList, outputStream)
+            outputStream.close() // Asegúrate de cerrar el outputStream después de escribir
+        } catch (e: Exception) {
+            e.printStackTrace() // Manejo de errores adecuado
+        }
+    }
+    fun deleteLibro(libro: Libro) {
+        try {
+            val serializer = Persister()
+            Log.d("DAO","deleting libro")
+            libros.remove(libro)
+            val librosList = Libros(libros)
+            val outputStream = openFileOutput("libros.xml", MODE_PRIVATE)
+            serializer.write(librosList, outputStream)
+            outputStream.close() // Asegúrate de cerrar el outputStream después de escribir
+        } catch (e: Exception) {
+            e.printStackTrace() // Manejo de errores adecuado
+        }
+    }
+    fun getLibro(libro: Libro) {
+        try {
+            val serializer = Persister()
+            Log.d("DAO","Buscar libro")
+            if (libros.contains(libro)){
+                libros
+            }
+
+            val librosList = Libros(libros)
+            val outputStream = openFileOutput("libros.xml", MODE_PRIVATE)
+            serializer.write(librosList, outputStream)
+            outputStream.close() // Asegúrate de cerrar el outputStream después de escribir
+        } catch (e: Exception) {
+            e.printStackTrace() // Manejo de errores adecuado
+        }
+    }
     private fun copiarArchivoDesdeAssets() {
         val nombreArchivo = "libros.xml"
         val archivoEnAssets = assets.open(nombreArchivo)
